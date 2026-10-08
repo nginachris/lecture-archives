@@ -41,11 +41,15 @@ Open `http://127.0.0.1:8000/docs` for the API documentation.
 
 ## Current API
 
+- `POST /uploads` accepts a lecture video or audio file and records it as an upload.
+- `GET /uploads/{upload_id}` returns the current upload status.
 - `POST /lectures` creates a lecture with timestamped transcript segments.
 - `GET /lectures/{lecture_id}` returns a lecture and its transcript.
 - `POST /lectures/{lecture_id}/search` searches the lecture and returns matching evidence.
 
 The current search uses a small, explainable keyword-ranking method. Later versions can replace it with embeddings and a language model while keeping the API contract similar.
+
+Uploads are currently stored locally and remain in the `uploaded` state. Automatic transcription is the next step.
 
 ## Roadmap
 

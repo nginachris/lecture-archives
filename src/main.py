@@ -1,10 +1,11 @@
 from contextlib import asynccontextmanager
 
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, File, Form, HTTPException, UploadFile
 
-from .db import create_lecture, get_lecture, initialize
+from .db import create_lecture, create_upload, get_lecture, get_upload, initialize
 from .schemas import LectureCreate, SearchRequest
 from .search import build_answer, rank_segments
+from .uploads import save_upload
 
 
 @asynccontextmanager
@@ -19,6 +20,30 @@ app = FastAPI(title="LectureLens API", version="0.1.0", lifespan=lifespan)
 @app.get("/health")
 def health():
     return {"status": "ok"}
+
+
+@app.post("/uploads", status_code=201)
+def upload_lecture(title: str = Form(...), file: UploadFile = File(...)):
+    try:
+        original_name, file_path = save_upload(file)
+    except ValueError as error:
+        raise HTTPException(status_code=400, detail=str(error)) from error
+
+    upload_id = create_upload(title, original_name, file_path)
+    return {
+        "id": upload_id,
+        "title": title,
+        "filename": original_name,
+        "status": "uploaded",
+    }
+
+
+@app.get("/uploads/{upload_id}")
+def upload_status(upload_id: int):
+    upload = get_upload(upload_id)
+    if upload is None:
+        raise HTTPException(status_code=404, detail="Upload not found")
+    return upload
 
 
 @app.post("/lectures", status_code=201)
@@ -51,4 +76,3 @@ def search_lecture(lecture_id: int, request: SearchRequest):
         "answer": build_answer(request.question, evidence),
         "evidence": evidence,
     }
-
