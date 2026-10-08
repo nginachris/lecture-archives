@@ -1,17 +1,17 @@
 # LectureLens
 
-LectureLens is an AI study archive for recorded lectures and tutorials. Users will be able to upload a recording, ask questions about it, and receive answers with timestamped transcript evidence.
+LectureLens is a small project for making recorded lectures easier to search. The idea is that a student can save a lecture, ask a question about it, and see which part of the transcript contains the answer.
 
 ## MVP scope
 
-The first version focuses on the core search workflow:
+The first version keeps the workflow simple. It can:
 
-1. Store a lecture and its timestamped transcript segments.
-2. Ask a natural-language question about the lecture.
-3. Find the most relevant transcript segments.
-4. Return an answer with evidence and timestamps.
+1. Save a lecture and its transcript segments with timestamps.
+2. Accept a question about the lecture.
+3. Search the transcript for matching sections.
+4. Return the matching text and its timestamp.
 
-Speech-to-text, user accounts, a web frontend, and generated flashcards will be added in later stages. Keeping the first version small makes it easier to test the search and evidence workflow before adding expensive video processing.
+At the moment, transcript segments are entered directly through the API. Video upload and automatic transcription are planned for the next stages. Starting with the transcript search gives us something small that we can test before adding video processing.
 
 ## Planned architecture
 
